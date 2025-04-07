@@ -1,0 +1,6 @@
+2025-03-03 23:54:48.157880+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CANDIDAT" not found (this database is empty); SQL statement:
+SELECT * FROM Candidat [42104-232]
+2025-03-03 23:56:29.709496+01:00 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ICANDIDAT" not found (this database is empty); SQL statement:
+SELECT * FROM ICandidat [42104-232]

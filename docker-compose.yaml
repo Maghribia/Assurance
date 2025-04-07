@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: ./services/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  api-gateway:
+    build:
+      context: ./services/apiGateway
+    container_name: api-gateway
+    ports:
+      - "8058:8058"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+    networks:
+      - app-network
+
+  contract-service:
+    build:
+      context: ./services/Contract
+    container_name: contract-service
+    ports:
+      - "8024:8024"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+        - SPRING_APPLICATION_NAME=contract-service
+
+    depends_on:
+      - eureka-server
+    networks:
+      - app-network
+
+volumes:
+  h2-data:
+networks:
+  app-network:
+    driver: bridge
