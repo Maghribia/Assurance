@@ -1,0 +1,16 @@
+2025-03-03 23:14:28.159763+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "drop table if exists [*]user cascade "; attendu "identifier"
+Syntax error in SQL statement "drop table if exists [*]user cascade "; expected "identifier"; SQL statement:
+drop table if exists user cascade  [42001-232]
+2025-03-03 23:14:28.181773+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "create table [*]user (cin integer, role tinyint check (role between 0 and 2), adresse varchar(255), email varchar(255), id varchar(255) not null, nom varchar(255), password varchar(255), prenom varchar(255), primary key (id))"; attendu "identifier"
+Syntax error in SQL statement "create table [*]user (cin integer, role tinyint check (role between 0 and 2), adresse varchar(255), email varchar(255), id varchar(255) not null, nom varchar(255), password varchar(255), prenom varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (cin integer, role tinyint check (role between 0 and 2), adresse varchar(255), email varchar(255), id varchar(255) not null, nom varchar(255), password varchar(255), prenom varchar(255), primary key (id)) [42001-232]
+2025-03-03 23:17:15.962887+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "drop table if exists [*]user cascade "; attendu "identifier"
+Syntax error in SQL statement "drop table if exists [*]user cascade "; expected "identifier"; SQL statement:
+drop table if exists user cascade  [42001-232]
+2025-03-03 23:17:15.976811+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "create table [*]user (cin integer, role tinyint check (role between 0 and 2), adresse varchar(255), email varchar(255), id varchar(255) not null, nom varchar(255), password varchar(255), prenom varchar(255), primary key (id))"; attendu "identifier"
+Syntax error in SQL statement "create table [*]user (cin integer, role tinyint check (role between 0 and 2), adresse varchar(255), email varchar(255), id varchar(255) not null, nom varchar(255), password varchar(255), prenom varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (cin integer, role tinyint check (role between 0 and 2), adresse varchar(255), email varchar(255), id varchar(255) not null, nom varchar(255), password varchar(255), prenom varchar(255), primary key (id)) [42001-232]
