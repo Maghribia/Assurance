@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: ./services/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  api-gateway:
+    build:
+      context: ./services/apiGateway
+    container_name: api-gateway
+    ports:
+      - "8058:8058"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    depends_on:
+      - eureka-server
+    networks:
+      - app-network
+
+  product-service:
+    build:
+      context: ./services/product
+    container_name: product-service
+    ports:
+      - "8057:8057"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-product:3306/maghribia?createDatabaseIfNotExist=true&useSSL=false
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      db-product:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  db-product:
+    image: mysql:8.0
+    container_name: db-product
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: maghribia
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
