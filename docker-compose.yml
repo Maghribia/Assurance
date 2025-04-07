@@ -1,15 +1,23 @@
 version: '3.8'
 
 services:
+<<<<<<< HEAD
   eureka-server:
     build:
       context: ./services/eureka-server
     container_name: eureka-server
+=======
+  eureka:
+    build: ./eureka-server
+    image: merieem/eureka:1.0
+    container_name: eureka
+>>>>>>> 247ee2654a6a01d669b06e95385f7492afae6fcf
     ports:
       - "8761:8761"
     networks:
       - app-network
 
+<<<<<<< HEAD
   api-gateway:
     build:
       context: ./services/apiGateway
@@ -64,3 +72,71 @@ volumes:
 networks:
   app-network:
     driver: bridge
+=======
+  apigateway:
+    build: ./apiGateway
+    image: merieem/apigateway:1.0
+    container_name: apiGateway
+    ports:
+      - "8058:8058"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - user
+      - db_user
+      - keycloak
+    networks:
+      - app-network
+
+  user:
+    build: ./user/user
+    image: merieem/user:1.0
+    container_name: user
+    ports:
+      - "8056:8056"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db_user:3306/user?createDatabaseIfNotExist=true&useSSL=false
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      - eureka
+      - db_user
+    networks:
+      - app-network
+
+  db_user:
+    image: mysql:5.7
+    container_name: db_user
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=user
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.0
+    container_name: keycloak
+    ports:
+      - "9098:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://db_user:3306/keycloak
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+    command: ["start-dev"]
+    depends_on:
+      - db_user
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+>>>>>>> 247ee2654a6a01d669b06e95385f7492afae6fcf
