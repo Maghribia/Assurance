@@ -27,8 +27,8 @@ public class DevisAgricultureController {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdDevis);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(
-                    Map.of("error", "Creation failed !!",
-                            "details", e.getMessage())
+                    Map.of("error !!! plz try again", "Creation failed !!",
+                            "details ...", e.getMessage())
             );
         }
     }
