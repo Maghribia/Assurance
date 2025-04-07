@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  eureka:
+    image: maher/eurekaserver:1.0
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  apigateway:
+    image: maher/apigateway:1.0
+    container_name: apiGateway
+    ports:
+      - "8058:8058"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - credit
+    networks:
+      - app-network
+
+  credit:
+    image: maher/credit:1.0
+    container_name: credit
+    ports:
+      - "8057:8057"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db_credit:3306/credit?createDatabaseIfNotExist=true&useSSL=false
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+    depends_on:
+      - eureka
+      - db_credit
+    networks:
+      - app-network
+
+  db_credit:
+    image: mysql:5.7
+    container_name: db_credit
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=credit
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
