@@ -1,0 +1,54 @@
+services:
+  eureka:
+    image: yossra/eureka:1.0
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+
+  apigateway:
+    image: yossra/apigateway:1.0
+    container_name: apiGateway
+    ports:
+      - "8058:8058"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - assurance_db
+      - devis
+    networks:
+      - app-network
+
+  devis:
+    image: yossra/devis:1.0
+    container_name: devis
+    ports:
+      - "8027:8027"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://assurance_db:3306/assurance_db?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - assurance_db
+    networks:
+      - app-network
+
+  assurance_db:
+    image: mysql:5.7
+    container_name: assurance_db
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=assurance_db
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
