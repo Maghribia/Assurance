@@ -1,8 +1,7 @@
-version: '3.8'
 
 services:
   eureka:
-    image: maher/eurekaserver:1.0
+    image: assurance/eureka:1.0
     container_name: eureka
     ports:
       - "8761:8761"
@@ -10,7 +9,7 @@ services:
       - app-network
 
   apigateway:
-    image: maher/apigateway:1.0
+    image: assurance/apigateway:1.0
     container_name: apiGateway
     ports:
       - "8058:8058"
@@ -18,24 +17,90 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
     depends_on:
       - eureka
-      - credit
-      - db_credit
     networks:
       - app-network
 
   credit:
-    image: maher/credit:1.0
+    image: assurance/credit:1.0
     container_name: credit
     ports:
-      - "8057:8057"
+      - "8028:8028"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db_credit:3306/credit?createDatabaseIfNotExist=true&useSSL=false
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
     depends_on:
       - eureka
       - db_credit
+    networks:
+      - app-network
+
+  contrat:
+    image: assurance/contrat:1.0
+    container_name: contrat
+    ports:
+      - "8024:8024"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+    networks:
+      - app-network
+
+  devis:
+    image: assurance/devis:1.0
+    container_name: devis
+    ports:
+      - "8027:8027"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db_credit:3306/credit?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - db_credit
+    networks:
+      - app-network
+
+  sinistre:
+    image: assurance/sinistre:1.0
+    container_name: sinistre
+    ports:
+      - "8025:8025"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+    networks:
+      - app-network
+
+  produit:
+    image: assurance/produit:1.0
+    container_name: produit
+    ports:
+      - "8026:8026"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db_credit:3306/credit?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
+      - db_credit
+    networks:
+      - app-network
+
+  user:
+    image: assurance/user:1.0
+    container_name: user
+    ports:
+      - "8023:8023"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka
+    depends_on:
+      - eureka
     networks:
       - app-network
 

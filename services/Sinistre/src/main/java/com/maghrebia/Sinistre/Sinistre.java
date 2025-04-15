@@ -1,12 +1,15 @@
 package com.maghrebia.Sinistre;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.Contract;
 
-@Entity
+import java.util.Date;
+
+@Document(collection = "Sinistre")
+
 @RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -14,6 +17,16 @@ import lombok.*;
 @Setter
 public class Sinistre {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idSinistre;
+    private String id;
+    private String Description;
+    private Date DateSinistre;
+    private  Double MontantRembourssement;
+    private String status;
+    @JsonProperty("Image")
+    private String Image;
+    @Lob
+    @JsonProperty("ImageData")
+    private byte[] imageData;
+    private String imageBase64;;
+    private String type_prop;
 }

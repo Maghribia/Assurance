@@ -91,5 +91,13 @@ public class DemandeController {
         return serviceDemande.getTotalDemandeCount();
     }
 
-
+    @PostMapping("/send")
+    public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String message) {
+        try {
+            creditService.sendEmail(to, subject, message);
+            return "Email envoyé avec succès à " + to;
+        } catch (MessagingException e) {
+            return "Erreur lors de l'envoi de l'email : " + e.getMessage();
+        }
+    }
 }

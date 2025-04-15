@@ -1,6 +1,7 @@
 package com.maghrebia.Credit;
 
-import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/credits")
-@AllArgsConstructor
+@RequiredArgsConstructor
+
+
 @CrossOrigin(origins = "http://localhost:4200") // Angular port
 
 public class CreditController {
@@ -18,6 +21,13 @@ public class CreditController {
 
 
     private final String UPLOAD_DIR = "uploads/";
+
+    @Value("${welcome.message}")
+    private String welcomeMessage;
+    @GetMapping("/welcome")
+    public String welcome() {
+        return welcomeMessage;
+    }
 
 
     @PostMapping("/add")
@@ -41,6 +51,8 @@ public class CreditController {
         creditService.deleteCredit(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
 
 

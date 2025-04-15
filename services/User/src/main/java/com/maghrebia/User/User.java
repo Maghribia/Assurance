@@ -9,7 +9,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Document(collection = "user")
@@ -22,14 +25,17 @@ public class User implements UserDetails {
     private String nom;
     private String prenom;
     private String adresse;
-    private ERole role;
+    private Set<ERole> roles = new HashSet<>(); // Utiliser un Set pour éviter les doublons
     private String email;
     private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));  // ✅ Utilisation correcte du rôle
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public String getUsername() {

@@ -5,13 +5,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication(scanBasePackages = "com.maghrebia.User")
+@EnableFeignClients
 
 @EnableDiscoveryClient
-public class UserApplication implements CommandLineRunner {
+public class UserApplication  {
 	@Autowired
 	private UserRepository userRepository;
 
@@ -20,19 +22,8 @@ public class UserApplication implements CommandLineRunner {
 
 
 	}
-	public void run(String...args){
-		User adminaccount = userRepository.findByRole(ERole.ADMIN);
-		if(null==adminaccount){
 
-			User user=new User();
-			user.setCin(123456);
-			user.setNom("maher");
-			user.setPrenom("selmi");
-			user.setAdresse("tabarka");
-			user.setEmail("maher@gmil.com");
-			user.setPassword(new BCryptPasswordEncoder().encode("admin"));
-		}
 
-	}
+
 
 }
